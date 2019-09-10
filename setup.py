@@ -13,5 +13,7 @@ setuptools.setup(
     entry_points="""
 [airavata.output_view_providers]
 gaussian-log-image = gateways19_tutorial.output_views:GaussianLogViewProvider
+[airavata.djangoapp]
+gateways19_tutorial = gateways19_tutorial.apps:Gateways19TutorialAppConfig
 """,
 )
