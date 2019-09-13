@@ -7,6 +7,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'django>=1.11.16',
+        'cclib',
         'numpy',
         'matplotlib'
     ],
