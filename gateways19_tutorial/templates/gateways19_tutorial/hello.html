@@ -1,9 +1,103 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 <div class="main-content-wrapper">
     <main class="main-content">
         <h1>Hello World</h1>
+        
+        <div class="card">
+            <div class="card-header">
+                Run "echo" for different languages
+            </div>
+            <div class="card-body">
+                <select id="greeting-select">
+
+                </select>
+                <button id="run-button" class="btn btn-primary">Run</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Experiments
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Application</th>
+                            <th scope="col">Creation Time</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="experiment-list">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
 </div>
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'django_airavata_api/dist/airavata-api.js' %}"></script>
+<script>
+    const { models, services, session, utils } = AiravataAPI;
+    
+    services.ExperimentSearchService
+        .list({limit: 5, [models.ExperimentSearchFields.USER_NAME]: session.Session.username})
+        .then(data => {
+            data.results.forEach(exp => $('#experiment-list').append(
+                `<tr>
+                    <td>${exp.name}</td>
+                    <td>${exp.executionId}</td>
+                    <td>${exp.creationTime}</td>
+                    <td>${exp.experimentStatus.name}</td>
+                </tr>`));
+    });
+
+    utils.FetchUtils.get("/gateways19_tutorial/languages")
+        .then(data => {
+            data.languages.forEach(language => {
+                $("#greeting-select").append(
+                    `<option value="${language.greeting}">
+                        ${language.lang} - "${language.greeting}"
+                     </option>`
+                )
+            })
+        });
+
+    $("#run-button").click(e => {
+        const greeting = $("#greeting-select").val();
+        const loadAppInterface = services.ApplicationInterfaceService.retrieve({lookup: "Echo_3f480d1f-ea86-4018-94bb-015423d66a1c"});
+        const loadWorkspacePrefs = services.WorkspacePreferencesService.get();
+        const resourceHostId = "bigred2.uits.iu.edu_ac140dca-3c88-46d8-b9ed-875d96ea6908";
+        const appDeploymentId = "bigred2.uits.iu.edu_Echo_19dc358d-d241-43d8-918c-f5a21a3b0845";
+        const queueName = "cpu";
+        const groupResourceProfileId = "6a642772-15fd-4d10-a847-8aef89b71830";
+        const loadQueues = services.ApplicationDeploymentService.getQueues({ lookup: appDeploymentId });
+        Promise.all([loadAppInterface, loadWorkspacePrefs, loadQueues])
+        .then(([appInterface, workspacePrefs, queues]) => {
+            const experiment = appInterface.createExperiment();
+            experiment.experimentName = "Echo " + greeting;
+            experiment.projectId = workspacePrefs.most_recent_project_id;
+            const cpuQueue = queues.find(q => q.queueName === queueName);
+            experiment.userConfigurationData.groupResourceProfileId = groupResourceProfileId;
+            experiment.userConfigurationData.computationalResourceScheduling.resourceHostId = resourceHostId;
+            experiment.userConfigurationData.computationalResourceScheduling.totalCPUCount = cpuQueue.defaultCPUCount;
+            experiment.userConfigurationData.computationalResourceScheduling.nodeCount = cpuQueue.defaultNodeCount;
+            experiment.userConfigurationData.computationalResourceScheduling.wallTimeLimit = cpuQueue.defaultWalltime;
+            experiment.userConfigurationData.computationalResourceScheduling.queueName = queueName;
+            experiment.experimentInputs[0].value = greeting;
+
+            return services.ExperimentService.create({data: experiment});
+        }).then(exp => {
+            return services.ExperimentService.launch({lookup: exp.experimentId});
+        })
+    });
+
+</script>
+
+{% endblock scripts %}
