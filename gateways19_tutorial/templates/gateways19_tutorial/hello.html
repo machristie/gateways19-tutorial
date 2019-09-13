@@ -5,36 +5,39 @@
 {% block content %}
 <div class="main-content-wrapper">
     <main class="main-content">
-        <h1>Hello World</h1>
-        
-        <div class="card">
-            <div class="card-header">
-                Run "echo" for different languages
+        <div class="container-fluid">
+            <h1>Hello World</h1>
+            
+            <div class="card">
+                <div class="card-header">
+                    Run "echo" for different languages
+                </div>
+                <div class="card-body">
+                    <select id="greeting-select">
+                        
+                    </select>
+                    <button id="run-button" class="btn btn-primary">Run</button>
+                </div>
             </div>
-            <div class="card-body">
-                <select id="greeting-select">
-
-                </select>
-                <button id="run-button" class="btn btn-primary">Run</button>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                Experiments
-            </div>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Application</th>
-                            <th scope="col">Creation Time</th>
-                            <th scope="col">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="experiment-list">
-                    </tbody>
-                </table>
+            <div class="card">
+                <div class="card-header">
+                    Experiments
+                </div>
+                <div class="card-body">
+                    <button id="refresh-button" class="btn btn-secondary">Refresh</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Application</th>
+                                <th scope="col">Creation Time</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="experiment-list">
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
@@ -46,17 +49,23 @@
 <script>
     const { models, services, session, utils } = AiravataAPI;
     
-    services.ExperimentSearchService
-        .list({limit: 5, [models.ExperimentSearchFields.USER_NAME]: session.Session.username})
-        .then(data => {
-            data.results.forEach(exp => $('#experiment-list').append(
-                `<tr>
-                    <td>${exp.name}</td>
-                    <td>${exp.executionId}</td>
-                    <td>${exp.creationTime}</td>
-                    <td>${exp.experimentStatus.name}</td>
-                </tr>`));
-    });
+    function loadExperiments() {
+
+        return services.ExperimentSearchService
+            .list({limit: 5, [models.ExperimentSearchFields.USER_NAME]: session.Session.username})
+            .then(data => {
+                data.results.forEach(exp => $('#experiment-list').append(
+                    `<tr>
+                        <td>${exp.name}</td>
+                        <td>${exp.executionId}</td>
+                        <td>${exp.creationTime}</td>
+                        <td>${exp.experimentStatus.name}</td>
+                    </tr>`));
+        });
+    }
+
+    loadExperiments();
+    $("#refresh-button").click(loadExperiments);
 
     utils.FetchUtils.get("/gateways19_tutorial/languages")
         .then(data => {
