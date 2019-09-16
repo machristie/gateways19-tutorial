@@ -8,10 +8,10 @@ from cclib.parser import ccopen
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-class GaussianLogViewProvider:
+class GaussianEigenvaluesViewProvider:
     display_type = 'image'
-    name = "Gaussian Log Viewer"
-    fixture_output_file = os.path.join(BASE_DIR, "data", "gaussian.log")
+    name = "Gaussian Eigenvalues"
+    test_output_file = os.path.join(BASE_DIR, "data", "gaussian.log")
 
     def generate_data(self, request, experiment_output, experiment, output_file=None):
 
