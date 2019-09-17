@@ -13,9 +13,7 @@
                     Run "echo" for different languages
                 </div>
                 <div class="card-body">
-                    <select id="greeting-select">
-                        
-                    </select>
+                    <select id="greeting-select"></select>
                     <button id="run-button" class="btn btn-primary">Run</button>
                 </div>
             </div>
@@ -50,6 +48,17 @@
 <script>
     const { models, services, session, utils } = AiravataAPI;
     
+    utils.FetchUtils.get("/gateways19_tutorial/languages")
+        .then(data => {
+            data.languages.forEach(language => {
+                $("#greeting-select").append(
+                    `<option value="${language.greeting}">
+                        ${language.lang} - "${language.greeting}"
+                     </option>`
+                )
+            })
+        });
+
     const appInterfaceId = "Echo_3f480d1f-ea86-4018-94bb-015423d66a1c";
 
     const FAKE_STDOUT = `
@@ -61,6 +70,7 @@ submit_args  : 	 submit_args = /N/dc2/scratch/cgateway/gta-work-dirs/PROCESS_3db
 NIDS         : 	 5
 NID Placement: 	 5/4 
 `;
+
     function loadExperiments() {
 
         return services.ExperimentSearchService
@@ -69,6 +79,7 @@ NID Placement: 	 5/4
                 [models.ExperimentSearchFields.APPLICATION_ID.name]: appInterfaceId,
             })
             .then(data => {
+                $('#experiment-list').empty();
                 data.results.forEach((exp, index) => {
                     $('#experiment-list').append(
                     `<tr>
@@ -109,26 +120,15 @@ NID Placement: 	 5/4
     loadExperiments();
     $("#refresh-button").click(loadExperiments);
 
-    utils.FetchUtils.get("/gateways19_tutorial/languages")
-        .then(data => {
-            data.languages.forEach(language => {
-                $("#greeting-select").append(
-                    `<option value="${language.greeting}">
-                        ${language.lang} - "${language.greeting}"
-                     </option>`
-                )
-            })
-        });
-
     $("#run-button").click(e => {
         const greeting = $("#greeting-select").val();
         const loadAppInterface = services.ApplicationInterfaceService.retrieve({lookup: appInterfaceId});
-        const loadWorkspacePrefs = services.WorkspacePreferencesService.get();
-        const resourceHostId = "bigred2.uits.iu.edu_ac140dca-3c88-46d8-b9ed-875d96ea6908";
         const appDeploymentId = "bigred2.uits.iu.edu_Echo_19dc358d-d241-43d8-918c-f5a21a3b0845";
+        const loadQueues = services.ApplicationDeploymentService.getQueues({ lookup: appDeploymentId });
+        const resourceHostId = "bigred2.uits.iu.edu_ac140dca-3c88-46d8-b9ed-875d96ea6908";
         const queueName = "cpu";
         const groupResourceProfileId = "6a642772-15fd-4d10-a847-8aef89b71830";
-        const loadQueues = services.ApplicationDeploymentService.getQueues({ lookup: appDeploymentId });
+        const loadWorkspacePrefs = services.WorkspacePreferencesService.get();
         Promise.all([loadAppInterface, loadWorkspacePrefs, loadQueues])
         .then(([appInterface, workspacePrefs, queues]) => {
             const experiment = appInterface.createExperiment();
@@ -141,6 +141,7 @@ NID Placement: 	 5/4
             experiment.userConfigurationData.computationalResourceScheduling.nodeCount = cpuQueue.defaultNodeCount;
             experiment.userConfigurationData.computationalResourceScheduling.wallTimeLimit = cpuQueue.defaultWalltime;
             experiment.userConfigurationData.computationalResourceScheduling.queueName = queueName;
+            // Copy the selected greeting to the value of the first input
             experiment.experimentInputs[0].value = greeting;
 
             return services.ExperimentService.create({data: experiment});
