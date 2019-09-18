@@ -1,2 +1,4 @@
 gateways19_tutorial_django_app.egg-info/
 *.pyc
+venv
+.vscode

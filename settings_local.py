@@ -51,11 +51,11 @@ SERVER_EMAIL = 'portal@example.com'
 
 # Keycloak Configuration
 KEYCLOAK_CLIENT_ID = 'django-tutorial'
-KEYCLOAK_CLIENT_SECRET = '5d1e261e-266c-436e-b96b-ff1640585c26'
-KEYCLOAK_AUTHORIZE_URL = 'https://iam.scigap.org/auth/realms/pearc19/protocol/openid-connect/auth'
-KEYCLOAK_TOKEN_URL = 'https://iam.scigap.org/auth/realms/pearc19/protocol/openid-connect/token'
-KEYCLOAK_USERINFO_URL = 'https://iam.scigap.org/auth/realms/pearc19/protocol/openid-connect/userinfo'
-KEYCLOAK_LOGOUT_URL = 'https://iam.scigap.org/auth/realms/pearc19/protocol/openid-connect/logout'
+KEYCLOAK_CLIENT_SECRET = 'cfe54ff1-9b46-430a-9469-aa3774c651e9'
+KEYCLOAK_AUTHORIZE_URL = 'https://iam.scigap.org/auth/realms/gateways19/protocol/openid-connect/auth'
+KEYCLOAK_TOKEN_URL = 'https://iam.scigap.org/auth/realms/gateways19/protocol/openid-connect/token'
+KEYCLOAK_USERINFO_URL = 'https://iam.scigap.org/auth/realms/gateways19/protocol/openid-connect/userinfo'
+KEYCLOAK_LOGOUT_URL = 'https://iam.scigap.org/auth/realms/gateways19/protocol/openid-connect/logout'
 # Optional: specify if using self-signed certificate or certificate from unrecognized CA
 KEYCLOAK_CA_CERTFILE = os.path.join(BASE_DIR, "django_airavata", "resources", "incommon_rsa_server_ca.pem")
 KEYCLOAK_VERIFY_SSL = True
@@ -63,7 +63,7 @@ KEYCLOAK_VERIFY_SSL = True
 AUTHENTICATION_OPTIONS = {
     # Control whether username/password authentication is allowed
     'password': {
-        'name': 'your account',
+        'name': 'Gateways19',
     },
     # Can have multiple external logins
     'external': [
@@ -75,11 +75,10 @@ AUTHENTICATION_OPTIONS = {
 }
 
 # Airavata API Configuration
-GATEWAY_ID = 'pearc19'
+GATEWAY_ID = 'gateways19'
 AIRAVATA_API_HOST = 'scigap02.sciencegateways.iu.edu'
 AIRAVATA_API_PORT = 9930
 AIRAVATA_API_SECURE = True
-GATEWAY_DATA_STORE_RESOURCE_ID = '...'
 GATEWAY_DATA_STORE_RESOURCE_ID = 'pga.staging.scigap.org_aa63ffa0-a99f-4885-8f4b-81e3c4c4d737'
 GATEWAY_DATA_STORE_DIR = '/tmp/experiment-data-dir'
 GATEWAY_DATA_STORE_HOSTNAME = 'pga.staging.scigap.org'
@@ -95,7 +94,7 @@ SHARING_API_PORT = 7878
 SHARING_API_SECURE = False
 
 # Portal settings
-PORTAL_TITLE = 'Django Airavata Gateway'
+PORTAL_TITLE = 'Gateways19 Portal'
 
 # Logging configuration. Uncomment following to override default log configuration
 # LOGGING = {
