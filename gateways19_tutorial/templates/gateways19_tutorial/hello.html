@@ -62,58 +62,56 @@
     const appInterfaceId = "Echo_4be0e1b0-24c5-417d-8d57-a695c2890a05";
 
     const FAKE_STDOUT = `
-stdout [Echo bonjour]
-Echoed_Output=bonjour
-Job Cleanup ran on Fri Jul 19 12:34:39 EDT 2019
-===============================
-submit_args  : 	 submit_args = /N/dc2/scratch/cgateway/gta-work-dirs/PROCESS_3db6a570-f150-4e01-b659-d422c5e38b32/job_349221662.pbs
-NIDS         : 	 5
-NID Placement: 	 5/4 
+bonjour
 `;
 
     function loadExperiments() {
-
-        return services.ExperimentSearchService
-            .list({limit: 5,
-                [models.ExperimentSearchFields.USER_NAME.name]: session.Session.username,
-                [models.ExperimentSearchFields.APPLICATION_ID.name]: appInterfaceId,
-            })
-            .then(data => {
-                $('#experiment-list').empty();
-                data.results.forEach((exp, index) => {
-                    $('#experiment-list').append(
+        return services.ExperimentSearchService.list({
+            limit: 5,
+            [models.ExperimentSearchFields.USER_NAME.name]:
+                session.Session.username,
+            [models.ExperimentSearchFields.APPLICATION_ID.name]: appInterfaceId
+        }).then(data => {
+            $("#experiment-list").empty();
+            data.results.forEach((exp, index) => {
+                $("#experiment-list").append(
                     `<tr>
-                        <td>${exp.name}</td>
-                        <td>${exp.executionId}</td>
-                        <td>${exp.creationTime}</td>
-                        <td>${exp.experimentStatus.name}</td>
-                        <td id="output_${index}"></td>
-                    </tr>`);
-                    // If experiment has finished, load full details, then parse the stdout file
-                    if (exp.experimentStatus === models.ExperimentState.COMPLETED) {
-                        services.FullExperimentService.retrieve({lookup: exp.experimentId})
+                            <td>${exp.name}</td>
+                            <td>${exp.executionId}</td>
+                            <td>${exp.creationTime}</td>
+                            <td>${exp.experimentStatus.name}</td>
+                            <td id="output_${index}"></td>
+                        </tr>`
+                );
+                // If experiment has finished, load full details, then parse the stdout file
+                if (exp.experimentStatus === models.ExperimentState.COMPLETED) {
+                    services.FullExperimentService.retrieve({
+                        lookup: exp.experimentId
+                    })
                         .then(fullDetails => {
-                            const stdoutDataProductId = fullDetails.experiment.experimentOutputs.find(o => o.name === "Standard Out").value;
-                            const stdoutDataProduct = fullDetails.outputDataProducts.find(dp => dp.productUri === stdoutDataProductId);
-                            if (stdoutDataProduct && stdoutDataProduct.downloadURL) {
+                            const stdoutDataProductId = fullDetails.experiment.experimentOutputs.find(
+                                o => o.name === "Echo-Standard-Out"
+                            ).value;
+                            const stdoutDataProduct = fullDetails.outputDataProducts.find(
+                                dp => dp.productUri === stdoutDataProductId
+                            );
+                            if (
+                                stdoutDataProduct &&
+                                stdoutDataProduct.downloadURL
+                            ) {
                                 return fetch(stdoutDataProduct.downloadURL, {
                                     credentials: "same-origin"
-                                })
-                                .then(result => result.text())
+                                }).then(result => result.text());
                             } else {
                                 // If we can't download it, fake it
                                 return FAKE_STDOUT;
                             }
                         })
                         .then(text => {
-                            const regex = /Echoed_Output=(.*)$/m;
-                            const result = regex.exec(text);
-                            if (result) {
-                                $(`#output_${index}`).text(result[1]);
-                            }
-                        })
-                    }
-                });
+                            $(`#output_${index}`).text(text);
+                        });
+                }
+            });
         });
     }
 
