@@ -59,7 +59,7 @@
             })
         });
 
-    const appInterfaceId = "Echo_3f480d1f-ea86-4018-94bb-015423d66a1c";
+    const appInterfaceId = "Echo_4be0e1b0-24c5-417d-8d57-a695c2890a05";
 
     const FAKE_STDOUT = `
 stdout [Echo bonjour]
@@ -123,24 +123,23 @@ NID Placement: 	 5/4
     $("#run-button").click(e => {
         const greeting = $("#greeting-select").val();
         const loadAppInterface = services.ApplicationInterfaceService.retrieve({lookup: appInterfaceId});
-        const appDeploymentId = "bigred2.uits.iu.edu_Echo_19dc358d-d241-43d8-918c-f5a21a3b0845";
+        const appDeploymentId = "pearc19-sgrc-cluster.jetstream-cloud.org_Echo_b0e05d53-cace-420b-b280-3626e5e1c94b";
         const loadQueues = services.ApplicationDeploymentService.getQueues({ lookup: appDeploymentId });
-        const resourceHostId = "bigred2.uits.iu.edu_ac140dca-3c88-46d8-b9ed-875d96ea6908";
-        const queueName = "cpu";
-        const groupResourceProfileId = "6a642772-15fd-4d10-a847-8aef89b71830";
+        const resourceHostId = "pearc19-sgrc-cluster.jetstream-cloud.org_cf5b3c5d-f524-4c66-883a-03662caa8178";
+        const queueName = "cloud";
+        const groupResourceProfileId = "573573a8-8084-459f-9a4a-138ab835b7b3";
         const loadWorkspacePrefs = services.WorkspacePreferencesService.get();
         Promise.all([loadAppInterface, loadWorkspacePrefs, loadQueues])
         .then(([appInterface, workspacePrefs, queues]) => {
             const experiment = appInterface.createExperiment();
             experiment.experimentName = "Echo " + greeting;
             experiment.projectId = workspacePrefs.most_recent_project_id;
-            const cpuQueue = queues.find(q => q.queueName === queueName);
+            const cloudQueue = queues.find(q => q.queueName === queueName);
             experiment.userConfigurationData.groupResourceProfileId = groupResourceProfileId;
             experiment.userConfigurationData.computationalResourceScheduling.resourceHostId = resourceHostId;
-            experiment.userConfigurationData.computationalResourceScheduling.totalCPUCount = cpuQueue.defaultCPUCount;
-            experiment.userConfigurationData.computationalResourceScheduling.nodeCount = cpuQueue.defaultNodeCount;
-            experiment.userConfigurationData.computationalResourceScheduling.wallTimeLimit = cpuQueue.defaultWalltime;
-            experiment.userConfigurationData.computationalResourceScheduling.queueName = queueName;
+            experiment.userConfigurationData.computationalResourceScheduling.totalCPUCount = cloudQueue.defaultCPUCount;
+            experiment.userConfigurationData.computationalResourceScheduling.nodeCount = cloudQueue.defaultNodeCount;
+            experiment.userConfigurationData.computationalResourceScheduling.wallTimeLimit = cloudQueue.defaultWalltime;
             // Copy the selected greeting to the value of the first input
             experiment.experimentInputs[0].value = greeting;
 
