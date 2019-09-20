@@ -12,5 +12,9 @@ setuptools.setup(
         'matplotlib'
     ],
     entry_points="""
+[airavata.output_view_providers]
+gaussian-eigenvalues-plot = gateways19_tutorial.output_views:GaussianEigenvaluesViewProvider
+[airavata.djangoapp]
+gateways19_tutorial = gateways19_tutorial.apps:Gateways19TutorialAppConfig
 """,
 )
