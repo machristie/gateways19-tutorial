@@ -138,6 +138,7 @@ bonjour
             experiment.userConfigurationData.computationalResourceScheduling.totalCPUCount = cloudQueue.defaultCPUCount;
             experiment.userConfigurationData.computationalResourceScheduling.nodeCount = cloudQueue.defaultNodeCount;
             experiment.userConfigurationData.computationalResourceScheduling.wallTimeLimit = cloudQueue.defaultWalltime;
+            experiment.userConfigurationData.computationalResourceScheduling.queueName = queueName;
             // Copy the selected greeting to the value of the first input
             experiment.experimentInputs[0].value = greeting;
 
