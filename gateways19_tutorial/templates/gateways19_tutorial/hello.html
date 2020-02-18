@@ -90,7 +90,7 @@ bonjour
                     })
                         .then(fullDetails => {
                             const stdoutDataProductId = fullDetails.experiment.experimentOutputs.find(
-                                o => o.name === "Echo-Standard-Out"
+                                o => o.name === "Echo-STDOUT"
                             ).value;
                             const stdoutDataProduct = fullDetails.outputDataProducts.find(
                                 dp => dp.productUri === stdoutDataProductId
