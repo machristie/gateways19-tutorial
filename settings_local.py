@@ -57,7 +57,7 @@ KEYCLOAK_TOKEN_URL = 'https://iam.scigap.org/auth/realms/default/protocol/openid
 KEYCLOAK_USERINFO_URL = 'https://iam.scigap.org/auth/realms/default/protocol/openid-connect/userinfo'
 KEYCLOAK_LOGOUT_URL = 'https://iam.scigap.org/auth/realms/default/protocol/openid-connect/logout'
 # Optional: specify if using self-signed certificate or certificate from unrecognized CA
-KEYCLOAK_CA_CERTFILE = os.path.join(BASE_DIR, "django_airavata", "resources", "incommon_rsa_server_ca.pem")
+# KEYCLOAK_CA_CERTFILE = os.path.join(BASE_DIR, "django_airavata", "resources", "incommon_rsa_server_ca.pem")
 KEYCLOAK_VERIFY_SSL = True
 
 AUTHENTICATION_OPTIONS = {
