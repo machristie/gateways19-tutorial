@@ -53,7 +53,7 @@
 <script>
     const { models, services, session, utils } = AiravataAPI;
     
-    utils.FetchUtils.get("/gateways19_tutorial/languages")
+    utils.FetchUtils.get("/gateways19_tutorial/languages/")
         .then(data => {
             data.languages.forEach(language => {
                 $("#greeting-select").append(
