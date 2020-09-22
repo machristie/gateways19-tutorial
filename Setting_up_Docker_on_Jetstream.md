@@ -5,9 +5,10 @@ Source your virtual environment and openrc.sh file. Then run the following
 ```
 export IMAGE=JS-API-Featured-CentOS7-Latest
 export PROJECT_NAME=${OS_USERNAME}-docker-tutorial
-openstack server create ${OS_USERNAME}-docker-tutorial --flavor m1.tiny --image $IMAGE --key-name ${OS_USERNAME}-key --security-group global-ssh --nic net-id=${OS_USERNAME}-api-net
+openstack server create ${PROJECT_NAME} --flavor m1.tiny --image $IMAGE --key-name ${OS_USERNAME}-key --security-group global-ssh --nic net-id=${OS_USERNAME}-api-net
 openstack floating ip create public
-openstack server add floating ip $PROJECT_NAME ...IP_ADDRESS...
+export IP_ADDRESS=...
+openstack server add floating ip $PROJECT_NAME $IP_ADDRESS
 ```
 
 If you don't have network setup use:
@@ -49,6 +50,28 @@ docker context use jetstream
 docker run hello-world
 ```
 
+## Creating a user
+
+```
+sudo adduser train01
+sudo usermod -aG docker train01
+sudo su - train01
+```
+
+As user:
+```
+# Create keypair without passphrase
+ssh-keygen
+cat .ssh/id_rsa.pub >> .ssh/authorized_keys
+chmod 600 .ssh/authorized_keys
+```
+
+`config` file:
+```
+Host 149.165.170.99
+  IdentityFile ~/.ssh/train01_id_rsa
+```
+
 ## Cleaning up
 
 ```
@@ -59,4 +82,4 @@ openstack server delete $PROJECT_NAME
 
 ## TODO
 
-- [ ] setting up user accounts
+- [x] setting up user accounts
