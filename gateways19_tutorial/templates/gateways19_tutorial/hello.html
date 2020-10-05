@@ -66,10 +66,6 @@
 
     const appInterfaceId = "Echo_23d67491-1bef-47bd-a0f5-faf069e09773";
 
-    const FAKE_STDOUT = `
-bonjour
-`;
-
     function loadExperiments() {
         return services.ExperimentSearchService.list({
             limit: 5,
@@ -108,9 +104,6 @@ bonjour
                                 return fetch(stdoutDataProduct.downloadURL, {
                                     credentials: "same-origin"
                                 }).then(result => result.text());
-                            } else {
-                                // If we can't download it, fake it
-                                return FAKE_STDOUT;
                             }
                         })
                         .then(text => {

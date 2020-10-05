@@ -83,6 +83,7 @@ AIRAVATA_API_SECURE = True
 GATEWAY_DATA_STORE_RESOURCE_ID = 'gf4.ucs.indiana.edu_61552681-96f0-462a-a36c-a62a010bffc6'
 GATEWAY_DATA_STORE_DIR = '/tmp/experiment-data-dir'
 GATEWAY_DATA_STORE_HOSTNAME = 'gf4.ucs.indiana.edu'
+GATEWAY_DATA_STORE_REMOTE_API = "https://testdrive.airavata.org/api"
 
 # Profile Service Configuration
 PROFILE_SERVICE_HOST = AIRAVATA_API_HOST
