@@ -51,11 +51,11 @@ SERVER_EMAIL = 'portal@example.com'
 
 # Keycloak Configuration
 KEYCLOAK_CLIENT_ID = 'django-tutorial'
-KEYCLOAK_CLIENT_SECRET = 'cfe54ff1-9b46-430a-9469-aa3774c651e9'
-KEYCLOAK_AUTHORIZE_URL = 'https://iam.scigap.org/auth/realms/gateways19/protocol/openid-connect/auth'
-KEYCLOAK_TOKEN_URL = 'https://iam.scigap.org/auth/realms/gateways19/protocol/openid-connect/token'
-KEYCLOAK_USERINFO_URL = 'https://iam.scigap.org/auth/realms/gateways19/protocol/openid-connect/userinfo'
-KEYCLOAK_LOGOUT_URL = 'https://iam.scigap.org/auth/realms/gateways19/protocol/openid-connect/logout'
+KEYCLOAK_CLIENT_SECRET = 'adaed995-feb8-4b10-a59d-2e5e4288ebfe'
+KEYCLOAK_AUTHORIZE_URL = 'https://iam.scigap.org/auth/realms/default/protocol/openid-connect/auth'
+KEYCLOAK_TOKEN_URL = 'https://iam.scigap.org/auth/realms/default/protocol/openid-connect/token'
+KEYCLOAK_USERINFO_URL = 'https://iam.scigap.org/auth/realms/default/protocol/openid-connect/userinfo'
+KEYCLOAK_LOGOUT_URL = 'https://iam.scigap.org/auth/realms/default/protocol/openid-connect/logout'
 # Optional: specify if using self-signed certificate or certificate from unrecognized CA
 # KEYCLOAK_CA_CERTFILE = os.path.join(BASE_DIR, "django_airavata", "resources", "incommon_rsa_server_ca.pem")
 KEYCLOAK_VERIFY_SSL = True
@@ -63,25 +63,27 @@ KEYCLOAK_VERIFY_SSL = True
 AUTHENTICATION_OPTIONS = {
     # Control whether username/password authentication is allowed
     'password': {
-        'name': 'Gateways19',
+        'name': 'Airavata Test Drive Gateway',
     },
     # Can have multiple external logins
     'external': [
         {
             'idp_alias': 'cilogon',
-            'name': 'CILogon',
+            'name': 'existing institution credentials',
+            'logo': 'images/cilogon-logo-24x24-b.png',
         }
     ]
 }
 
 # Airavata API Configuration
-GATEWAY_ID = 'gateways19'
+GATEWAY_ID = 'default'
 AIRAVATA_API_HOST = 'scigap02.sciencegateways.iu.edu'
 AIRAVATA_API_PORT = 9930
 AIRAVATA_API_SECURE = True
-GATEWAY_DATA_STORE_RESOURCE_ID = 'pga.staging.scigap.org_aa63ffa0-a99f-4885-8f4b-81e3c4c4d737'
+GATEWAY_DATA_STORE_RESOURCE_ID = 'gf4.ucs.indiana.edu_61552681-96f0-462a-a36c-a62a010bffc6'
 GATEWAY_DATA_STORE_DIR = '/tmp/experiment-data-dir'
-GATEWAY_DATA_STORE_HOSTNAME = 'pga.staging.scigap.org'
+GATEWAY_DATA_STORE_HOSTNAME = 'gf4.ucs.indiana.edu'
+GATEWAY_DATA_STORE_REMOTE_API = "https://testdrive.airavata.org/api"
 
 # Profile Service Configuration
 PROFILE_SERVICE_HOST = AIRAVATA_API_HOST
@@ -94,7 +96,7 @@ SHARING_API_PORT = 7878
 SHARING_API_SECURE = False
 
 # Portal settings
-PORTAL_TITLE = 'Gateways19 Portal'
+PORTAL_TITLE = 'Gateways19 Tutorial Portal'
 
 # Logging configuration. Uncomment following to override default log configuration
 # LOGGING = {
