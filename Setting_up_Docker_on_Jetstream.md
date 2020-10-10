@@ -53,9 +53,9 @@ docker run hello-world
 ## Creating a user
 
 ```
-sudo adduser train01
-sudo usermod -aG docker train01
-sudo su - train01
+sudo adduser training
+sudo usermod -aG docker training
+sudo su - training
 ```
 
 As user:
@@ -64,12 +64,13 @@ As user:
 ssh-keygen
 cat .ssh/id_rsa.pub >> .ssh/authorized_keys
 chmod 600 .ssh/authorized_keys
+cp .ssh/id_rsa /tmp/
 ```
 
 `config` file:
 ```
 Host 149.165.170.99
-  IdentityFile ~/.ssh/train01_id_rsa
+  IdentityFile ~/.ssh/id_rsa
 ```
 
 ## Cleaning up
