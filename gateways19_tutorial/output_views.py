@@ -12,7 +12,7 @@ class GaussianEigenvaluesViewProvider:
     display_type = 'image'
     name = "Gaussian Eigenvalues"
 
-    def generate_data(self, request, experiment_output, experiment, output_file=None):
+    def generate_data(self, request, experiment_output, experiment, output_file=None, **kwargs):
 
         # Parse output_file
         output_text = io.TextIOWrapper(output_file)
